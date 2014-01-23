@@ -23,8 +23,49 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -->
 
 <definitions xmlns:btc4j="http://www.btc4j.org/ws/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:ns="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://www.btc4j.org/ws/"
-	name="btc4j-ws">
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://schemas.xmlsoap.org/soap/encoding/"
+	targetNamespace="http://www.btc4j.org/ws/" name="btc4j-ws">
+	<types>
+		<xsd:schema targetNamespace="http://www.btc4j.org/ws/">
+			<xsd:element name="btcFault">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="code" type="xsd:integer" />
+						<xsd:element name="message" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="helpReq">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="command" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="helpResp">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="help" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</types>
+	<message name="btcException">
+		<part name="fault" element="btc4j:btcFault" />
+	</message>
+	<message name="helpReq">
+		<part name="params" element="btc4j:helpReq" />
+	</message>
+	<message name="helpResp">
+		<part name="params" element="btc4j:helpResp" />
+	</message>
+	<portType name="BtcDaemonServicePort">
+		<operation name="help">
+			<input message="btc4j:helpReq" />
+			<output message="btc4j:helpResp" />
+			<fault message="btc4j:btcException" name="btcException" />
+		</operation>
+	</portType>
 </definitions>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://cxf.apache.org/jaxws
+		http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<jaxws:endpoint xmlns:tns="http://www.btc4j.org/ws/"
+		id="btcDaemonService" implementor="org.btc4j.ws.impl.BtcDaemonServicePortImpl"
+		serviceName="tns:BtcDaemonService" address="/BtcDaemonService">
+		<jaxws:inInterceptors>
+			<ref bean="wss4jIn" />
+		</jaxws:inInterceptors>
+	</jaxws:endpoint>
+	
+	<bean id="wss4jIn" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+		<constructor-arg>
+			<map>
+				<entry key="action" value="Timestamp UsernameToken" />
+				<entry key="passwordType" value="PasswordText" />
+				<entry key="passwordCallbackClass" value="org.btc4j.ws.impl.AuthenticationHandler" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+</beans>

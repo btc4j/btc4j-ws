@@ -32,23 +32,21 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		http://cxf.apache.org/jaxws
 		http://cxf.apache.org/schemas/jaxws.xsd">
 
-	<jaxws:endpoint xmlns:tns="http://www.btc4j.org/ws/" id="btcDaemonService"
-		implementor="org.btc4j.ws.impl.BtcDaemonServicePortImpl" address="/BtcDaemonService">
-		<jaxws:properties>
-			<entry key="ws-security.ut.validator">
-				<bean class="org.btc4j.ws.impl.BtcUsernameTokenValidator" />
-			</entry>
-		</jaxws:properties>
-		<jaxws:inInterceptors>
-			<ref bean="wss4jIn" />
-		</jaxws:inInterceptors>
-	</jaxws:endpoint>
-
-	<bean id="wss4jIn" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+	<jaxws:client id="btcDaemonService"
+		serviceClass="org.btc4j.ws.BtcDaemonServicePort"
+		address="https://127.0.0.1:9443/btc4j-ws/BtcDaemonService">
+		<jaxws:outInterceptors>
+			<ref bean="wss4jOut" />
+		</jaxws:outInterceptors>
+	</jaxws:client>
+	
+	<bean id="wss4jOut" class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
 		<constructor-arg>
 			<map>
 				<entry key="action" value="Timestamp UsernameToken" />
 				<entry key="passwordType" value="PasswordText" />
+				<entry key="user" value="user" />
+				<entry key="passwordCallbackClass" value="org.btc4j.ws.ClientPasswordCallbackHandler" />
 			</map>
 		</constructor-arg>
 	</bean>

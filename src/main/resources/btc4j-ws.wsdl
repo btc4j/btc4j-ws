@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
 The MIT License (MIT)
 
@@ -23,49 +24,44 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -->
 
 <definitions xmlns:btc4j="http://www.btc4j.org/ws/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://schemas.xmlsoap.org/soap/encoding/"
-	targetNamespace="http://www.btc4j.org/ws/" name="btc4j-ws">
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	targetNamespace="http://www.btc4j.org/ws/"
+	name="btc4j-ws">
 	<types>
 		<xsd:schema targetNamespace="http://www.btc4j.org/ws/">
-			<xsd:element name="btcFault">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="code" type="xsd:integer" />
-						<xsd:element name="message" type="xsd:string" />
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="helpReq">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="command" type="xsd:string"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="helpResp">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="help" type="xsd:string"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
+			<xsd:complexType name="fault">
+				<xsd:sequence>
+					<xsd:element name="code" type="xsd:integer" />
+					<xsd:element name="message" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
 		</xsd:schema>
 	</types>
-	<message name="btcException">
-		<part name="fault" element="btc4j:btcFault" />
+	<message name="btcWsException">
+		<part name="fault" type="btc4j:fault" />
 	</message>
-	<message name="helpReq">
-		<part name="params" element="btc4j:helpReq" />
+	<message name="helpRequest">
+		<part name="command" type="xsd:string" />
 	</message>
-	<message name="helpResp">
-		<part name="params" element="btc4j:helpResp" />
+	<message name="helpResponse">
+		<part name="help" type="xsd:string" />
+	</message>
+	<message name="stopRequest" />
+	<message name="stopResponse">
+		<part name="message" type="xsd:string" />
 	</message>
 	<portType name="BtcDaemonServicePort">
 		<operation name="help">
-			<input message="btc4j:helpReq" />
-			<output message="btc4j:helpResp" />
-			<fault message="btc4j:btcException" name="btcException" />
+			<input message="btc4j:helpRequest" />
+			<output message="btc4j:helpResponse" />
+			<fault message="btc4j:btcWsException" name="btcWsException" />
+		</operation>
+		<operation name="stop">
+			<input message="btc4j:stopRequest" />
+			<output message="btc4j:stopResponse" />
+			<fault message="btc4j:btcWsException" name="btcWsException" />
 		</operation>
 	</portType>
 </definitions>

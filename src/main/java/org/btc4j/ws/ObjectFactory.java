@@ -30,27 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link HelpResp }
+     * Create an instance of {@link Fault }
      * 
      */
-    public HelpResp createHelpResp() {
-        return new HelpResp();
-    }
-
-    /**
-     * Create an instance of {@link HelpReq }
-     * 
-     */
-    public HelpReq createHelpReq() {
-        return new HelpReq();
-    }
-
-    /**
-     * Create an instance of {@link BtcFault }
-     * 
-     */
-    public BtcFault createBtcFault() {
-        return new BtcFault();
+    public Fault createFault() {
+        return new Fault();
     }
 
 }

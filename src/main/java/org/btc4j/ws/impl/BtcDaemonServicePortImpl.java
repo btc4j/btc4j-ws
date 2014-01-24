@@ -27,9 +27,7 @@ package org.btc4j.ws.impl;
 import java.util.logging.Logger;
 
 import org.btc4j.ws.BtcDaemonServicePort;
-import org.btc4j.ws.BtcException;
-import org.btc4j.ws.HelpReq;
-import org.btc4j.ws.HelpResp;
+import org.btc4j.ws.BtcWsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -42,18 +40,23 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class BtcDaemonServicePortImpl implements BtcDaemonServicePort {
     private static final Logger LOG = Logger.getLogger(BtcDaemonServicePortImpl.class.getName());
 
-    public HelpResp help(HelpReq params) throws BtcException    { 
+    public String help(String params) throws BtcWsException    { 
         try {
         	LOG.info("params: " + params);
         	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             LOG.info("auth: " + auth);
             LOG.info("principal: " + auth.getPrincipal());
             LOG.info("credentials: " + auth.getCredentials());
-            HelpResp _return = null;
-            return _return;
+            return "";
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
     }
+
+	@Override
+	public String stop() throws BtcWsException {
+		// TODO Auto-generated method stub
+		return "";
+	}
 }

@@ -30,6 +30,8 @@ import org.btc4j.ws.BtcDaemonServicePort;
 import org.btc4j.ws.BtcException;
 import org.btc4j.ws.HelpReq;
 import org.btc4j.ws.HelpResp;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @javax.jws.WebService(
                       serviceName = "BtcDaemonService",
@@ -41,9 +43,12 @@ public class BtcDaemonServicePortImpl implements BtcDaemonServicePort {
     private static final Logger LOG = Logger.getLogger(BtcDaemonServicePortImpl.class.getName());
 
     public HelpResp help(HelpReq params) throws BtcException    { 
-        LOG.info("Executing operation help");
-        System.out.println(params);
         try {
+        	LOG.info("params: " + params);
+        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            LOG.info("auth: " + auth);
+            LOG.info("principal: " + auth.getPrincipal());
+            LOG.info("credentials: " + auth.getCredentials());
             HelpResp _return = null;
             return _return;
         } catch (Exception ex) {

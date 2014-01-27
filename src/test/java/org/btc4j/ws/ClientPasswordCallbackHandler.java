@@ -33,6 +33,11 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import org.apache.ws.security.WSPasswordCallback;
 
 public class ClientPasswordCallbackHandler implements CallbackHandler {
+	private String password;
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	@Override
 	public void handle(Callback[] callbacks) throws IOException,
@@ -41,6 +46,6 @@ public class ClientPasswordCallbackHandler implements CallbackHandler {
 			throw new UnsupportedCallbackException(callbacks[0]);
 		}
         WSPasswordCallback callback = (WSPasswordCallback) callbacks[0];
-		callback.setPassword(BtcDaemonServiceTest.BTCWS_PASSWORD);
+		callback.setPassword(password);
 	}
 }

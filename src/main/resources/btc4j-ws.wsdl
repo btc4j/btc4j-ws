@@ -31,7 +31,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	name="btc4j-ws">
 	<types>
 		<xsd:schema targetNamespace="http://www.btc4j.org/ws/">
-			<xsd:complexType name="fault">
+			<xsd:complexType name="btcFault">
 				<xsd:sequence>
 					<xsd:element name="code" type="xsd:integer" />
 					<xsd:element name="message" type="xsd:string" />
@@ -40,7 +40,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		</xsd:schema>
 	</types>
 	<message name="btcWsException">
-		<part name="fault" type="btc4j:fault" />
+		<part name="fault" type="btc4j:btcFault" />
+	</message>
+	<message name="getConnectionCountRequest" />
+	<message name="getConnectionCountResponse">
+		<part name="connections" type="xsd:integer" />
 	</message>
 	<message name="helpRequest">
 		<part name="command" type="xsd:string" />
@@ -53,6 +57,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		<part name="message" type="xsd:string" />
 	</message>
 	<portType name="BtcDaemonServicePort">
+		<operation name="getConnectionCount">
+			<input message="btc4j:getConnectionCountRequest" />
+			<output message="btc4j:getConnectionCountResponse" />
+			<fault message="btc4j:btcWsException" name="btcWsException" />
+		</operation>
 		<operation name="help">
 			<input message="btc4j:helpRequest" />
 			<output message="btc4j:helpResponse" />

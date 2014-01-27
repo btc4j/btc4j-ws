@@ -24,17 +24,22 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -->
 
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:ctx="http://www.springframework.org/schema/context"
 	xmlns:jaxws="http://cxf.apache.org/jaxws"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
 		http://cxf.apache.org/jaxws
 		http://cxf.apache.org/schemas/jaxws.xsd">
+		
+	<ctx:property-placeholder location="classpath:btc4j-ws-test.properties" />
 
-	<jaxws:client id="btcDaemonService"
-		serviceClass="org.btc4j.ws.BtcDaemonServicePort"
-		address="https://127.0.0.1:9443/btc4j-ws/BtcDaemonService">
+	<jaxws:client id="btcDaemonService" serviceClass="org.btc4j.ws.BtcDaemonServicePort"
+		address="${ws.url}/BtcDaemonService">
 		<jaxws:outInterceptors>
 			<ref bean="wss4jOut" />
 		</jaxws:outInterceptors>
@@ -45,10 +50,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			<map>
 				<entry key="action" value="Timestamp UsernameToken" />
 				<entry key="passwordType" value="PasswordText" />
-				<entry key="user" value="user" />
-				<entry key="passwordCallbackClass" value="org.btc4j.ws.ClientPasswordCallbackHandler" />
+				<entry key="user" value="${ws.user}" />
+				<entry key="passwordCallbackRef">
+					<ref bean="passwordCallback" />
+				</entry>
 			</map>
 		</constructor-arg>
 	</bean>
-
+	
+	<bean id="passwordCallback" class="org.btc4j.ws.ClientPasswordCallbackHandler"
+		p:password="${ws.password}" />
 </beans>

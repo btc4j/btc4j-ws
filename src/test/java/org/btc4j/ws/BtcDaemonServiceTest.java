@@ -26,6 +26,8 @@ package org.btc4j.ws;
 
 import static org.junit.Assert.*;
 
+import java.math.BigInteger;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,14 +35,15 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class BtcDaemonServiceTest {
 	private static final boolean BTCWS_STOP = false;
-	static final String BTCWS_PASSWORD = "password";
+	private static final String BTCWS_SPRING = "btc4j-ws-test.xml";
+	private static final String BTCWS_BEAN = "btcDaemonService";
 	private static ClassPathXmlApplicationContext BTCWS_CTX;
 	private static BtcDaemonServicePort BTCWS_SVC;
 	
 	@BeforeClass
 	public static void init() throws Exception {
-		BTCWS_CTX = new ClassPathXmlApplicationContext("btc4j-ws-test.xml");
-		BTCWS_SVC = (BtcDaemonServicePort) BTCWS_CTX.getBean("btcDaemonService");
+		BTCWS_CTX = new ClassPathXmlApplicationContext(BTCWS_SPRING);
+		BTCWS_SVC = (BtcDaemonServicePort) BTCWS_CTX.getBean(BTCWS_BEAN);
 	}
 	
 	@AfterClass
@@ -54,9 +57,25 @@ public class BtcDaemonServiceTest {
 	}
 	
 	@Test
+	public void getConnectionCount() throws BtcWsException {
+		BigInteger connections = BTCWS_SVC.getConnectionCount();
+		assertTrue(connections.compareTo(BigInteger.ZERO) >= 0);
+	}
+	
+	@Test
 	public void help() throws BtcWsException {
 		String help = BTCWS_SVC.help("");
 		assertNotNull(help);
+		assertTrue(help.length() >= 0);
+		help = BTCWS_SVC.help(null);
+		assertNotNull(help);
+		assertTrue(help.length() >= 0);
+		help = BTCWS_SVC.help("walletlock");
+		assertNotNull(help);
+		assertTrue(help.length() >= 0);
+		help = BTCWS_SVC.help("fakecommand");
+		assertNotNull(help);
+		assertTrue(help.length() >= 0);
 	}
 
 }

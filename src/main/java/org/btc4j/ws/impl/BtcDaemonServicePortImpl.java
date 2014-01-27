@@ -24,39 +24,76 @@
 
 package org.btc4j.ws.impl;
 
+import java.math.BigInteger;
+import java.net.URL;
 import java.util.logging.Logger;
 
+import javax.jws.WebService;
+
+import org.btc4j.core.BtcException;
+import org.btc4j.daemon.BtcDaemon;
 import org.btc4j.ws.BtcDaemonServicePort;
+import org.btc4j.ws.BtcFault;
 import org.btc4j.ws.BtcWsException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-@javax.jws.WebService(
-                      serviceName = "BtcDaemonService",
-                      portName = "BtcDaemonServicePort",
-                      targetNamespace = "http://www.btc4j.org/ws/",
-                      endpointInterface = "org.btc4j.ws.BtcDaemonServicePort")
-                     
+@WebService(serviceName = "BtcDaemonService", portName = "BtcDaemonServicePort", targetNamespace = "http://www.btc4j.org/ws/", endpointInterface = "org.btc4j.ws.BtcDaemonServicePort")
 public class BtcDaemonServicePortImpl implements BtcDaemonServicePort {
-    private static final Logger LOG = Logger.getLogger(BtcDaemonServicePortImpl.class.getName());
+	private static final Logger LOG = Logger
+			.getLogger(BtcDaemonServicePortImpl.class.getName());
+	private static final int BTC4JWS_ERROR_CODE = -32078;
+	private static final String BTC4JWS_ERROR_MESSAGE = "btc4j-ws error";
 
-    public String help(String params) throws BtcWsException    { 
-        try {
-        	LOG.info("params: " + params);
-        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            LOG.info("auth: " + auth);
-            LOG.info("principal: " + auth.getPrincipal());
-            LOG.info("credentials: " + auth.getCredentials());
-            return "";
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        }
-    }
+	@Autowired
+	private URL daemonUrl;
+
+	private BtcWsException btcWsException(Throwable t) {
+		LOG.severe(String.valueOf(t));
+		BtcFault fault = new BtcFault();
+		if (t instanceof BtcException) {
+			BtcException e = (BtcException) t;
+			fault.setCode(BigInteger.valueOf(e.getCode()));
+			fault.setMessage(e.getMessage());
+		} else {
+			fault.setCode(BigInteger.valueOf(BTC4JWS_ERROR_CODE));
+			fault.setMessage(BTC4JWS_ERROR_MESSAGE + ": " + t.getMessage());
+		}
+		return new BtcWsException(t.getMessage(), fault, t);
+	}
+
+	private BtcDaemon getDaemon() {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		return new BtcDaemon(daemonUrl, String.valueOf(auth.getName()),
+				String.valueOf(auth.getCredentials()));
+	}
+
+	@Override
+	public BigInteger getConnectionCount() throws BtcWsException {
+		try {
+			return BigInteger.valueOf(getDaemon().getConnectionCount());
+		} catch (Throwable t) {
+			throw btcWsException(t);
+		}
+	}
+
+	@Override
+	public String help(String command) throws BtcWsException {
+		try {
+			return getDaemon().help(command);
+		} catch (Throwable t) {
+			throw btcWsException(t);
+		}
+	}
 
 	@Override
 	public String stop() throws BtcWsException {
-		// TODO Auto-generated method stub
-		return "";
+		try {
+			return getDaemon().stop();
+		} catch (Throwable t) {
+			throw btcWsException(t);
+		}
 	}
 }

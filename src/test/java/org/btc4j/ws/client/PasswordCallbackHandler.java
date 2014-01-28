@@ -22,7 +22,7 @@
  SOFTWARE.
  */
 
-package org.btc4j.ws;
+package org.btc4j.ws.client;
 
 import java.io.IOException;
 
@@ -32,7 +32,7 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 
 import org.apache.ws.security.WSPasswordCallback;
 
-public class ClientPasswordCallbackHandler implements CallbackHandler {
+public class PasswordCallbackHandler implements CallbackHandler {
 	private String password;
 	
 	public void setPassword(String password) {

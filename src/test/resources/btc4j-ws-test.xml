@@ -58,6 +58,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		</constructor-arg>
 	</bean>
 	
-	<bean id="passwordCallback" class="org.btc4j.ws.ClientPasswordCallbackHandler"
+	<bean id="passwordCallback" class="org.btc4j.ws.client.PasswordCallbackHandler"
 		p:password="${ws.password}" />
 </beans>

@@ -58,6 +58,7 @@ public class BtcDaemonServiceTest {
 	
 	@Test
 	public void getConnectionCount() throws BtcWsException {
+		System.out.println("BtcDaemonServiceTest.getConnectionCount");
 		BigInteger connections = BTCWS_SVC.getConnectionCount();
 		assertTrue(connections.compareTo(BigInteger.ZERO) >= 0);
 	}

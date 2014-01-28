@@ -24,6 +24,7 @@
 
 package org.btc4j.ws.impl;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.logging.Logger;
@@ -63,17 +64,63 @@ public class BtcDaemonServicePortImpl implements BtcDaemonServicePort {
 		return new BtcWsException(t.getMessage(), fault, t);
 	}
 
-	private BtcDaemon getDaemon() {
+	private BtcDaemon getDaemon(String method) {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
+		LOG.info(auth.getName() + "@" + daemonUrl + "/" + method);
 		return new BtcDaemon(daemonUrl, String.valueOf(auth.getName()),
 				String.valueOf(auth.getCredentials()));
 	}
 
 	@Override
+	public void backupWallet(String destination) throws BtcWsException {
+		try {
+			getDaemon("backupWallet").backupWallet(new File(destination));
+		} catch (Throwable t) {
+			throw btcWsException(t);
+		}
+	}
+	
+	@Override
+	public String dumpPrivateKey(String address) throws BtcWsException {
+		try {
+			return getDaemon("dumpPrivateKey").dumpPrivateKey(address);
+		} catch (Throwable t) {
+			throw btcWsException(t);
+		}
+	}
+	
+	@Override
+	public String getAccount(String address) throws BtcWsException {
+		try {
+			return getDaemon("getAccount").getAccount(address);
+		} catch (Throwable t) {
+			throw btcWsException(t);
+		}
+	}
+	
+	@Override
+	public String getAccountAddress(String account) throws BtcWsException {
+		try {
+			return getDaemon("getAccountAddress").getAccountAddress(account);
+		} catch (Throwable t) {
+			throw btcWsException(t);
+		}
+	}
+
+	@Override
+	public String[] getAddressesByAccount(String account) throws BtcWsException {
+		try {
+			return getDaemon("getAddressesByAccount").getAddressesByAccount(account).toArray(new String[]{});
+		} catch (Throwable t) {
+			throw btcWsException(t);
+		}
+	}
+	
+	@Override
 	public BigInteger getConnectionCount() throws BtcWsException {
 		try {
-			return BigInteger.valueOf(getDaemon().getConnectionCount());
+			return BigInteger.valueOf(getDaemon("getConnectionCount").getConnectionCount());
 		} catch (Throwable t) {
 			throw btcWsException(t);
 		}
@@ -82,7 +129,7 @@ public class BtcDaemonServicePortImpl implements BtcDaemonServicePort {
 	@Override
 	public String help(String command) throws BtcWsException {
 		try {
-			return getDaemon().help(command);
+			return getDaemon("help").help(command);
 		} catch (Throwable t) {
 			throw btcWsException(t);
 		}
@@ -91,7 +138,7 @@ public class BtcDaemonServicePortImpl implements BtcDaemonServicePort {
 	@Override
 	public String stop() throws BtcWsException {
 		try {
-			return getDaemon().stop();
+			return getDaemon("stop").stop();
 		} catch (Throwable t) {
 			throw btcWsException(t);
 		}

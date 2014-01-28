@@ -31,6 +31,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	name="btc4j-ws">
 	<types>
 		<xsd:schema targetNamespace="http://www.btc4j.org/ws/">
+			<xsd:simpleType name="addresses">
+				<xsd:list itemType="xsd:string">
+				</xsd:list>
+			</xsd:simpleType>
 			<xsd:complexType name="btcFault">
 				<xsd:sequence>
 					<xsd:element name="code" type="xsd:integer" />
@@ -41,6 +45,34 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	</types>
 	<message name="btcWsException">
 		<part name="fault" type="btc4j:btcFault" />
+	</message>
+	<message name="backupWalletRequest">
+		<part name="destination" type="xsd:string" />
+	</message>
+	<message name="backupWalletResponse" />
+	<message name="dumpPrivateKeyRequest">
+		<part name="address" type="xsd:string" />
+	</message>
+	<message name="dumpPrivateKeyResponse">
+		<part name="privateKey" type="xsd:string" />
+	</message>
+	<message name="getAccountRequest">
+		<part name="address" type="xsd:string" />
+	</message>
+	<message name="getAccountResponse">
+		<part name="account" type="xsd:string" />
+	</message>
+	<message name="getAccountAddressRequest">
+		<part name="account" type="xsd:string" />
+	</message>
+	<message name="getAccountAddressResponse">
+		<part name="address" type="xsd:string" />
+	</message>
+	<message name="getAddressesByAccountRequest">
+		<part name="account" type="xsd:string" />
+	</message>
+	<message name="getAddressesByAccountResponse">
+		<part name="addresses" type="btc4j:addresses" />
 	</message>
 	<message name="getConnectionCountRequest" />
 	<message name="getConnectionCountResponse">
@@ -57,6 +89,31 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		<part name="message" type="xsd:string" />
 	</message>
 	<portType name="BtcDaemonServicePort">
+		<operation name="backupWallet">
+			<input message="btc4j:backupWalletRequest" />
+			<output message="btc4j:backupWalletResponse" />
+			<fault message="btc4j:btcWsException" name="btcWsException" />
+		</operation>
+		<operation name="dumpPrivateKey">
+			<input message="btc4j:dumpPrivateKeyRequest" />
+			<output message="btc4j:dumpPrivateKeyResponse" />
+			<fault message="btc4j:btcWsException" name="btcWsException" />
+		</operation>
+		<operation name="getAccount">
+			<input message="btc4j:getAccountRequest" />
+			<output message="btc4j:getAccountResponse" />
+			<fault message="btc4j:btcWsException" name="btcWsException" />
+		</operation>
+		<operation name="getAccountAddress">
+			<input message="btc4j:getAccountAddressRequest" />
+			<output message="btc4j:getAccountAddressResponse" />
+			<fault message="btc4j:btcWsException" name="btcWsException" />
+		</operation>
+		<operation name="getAddressesByAccount">
+			<input message="btc4j:getAddressesByAccountRequest" />
+			<output message="btc4j:getAddressesByAccountResponse" />
+			<fault message="btc4j:btcWsException" name="btcWsException" />
+		</operation>
 		<operation name="getConnectionCount">
 			<input message="btc4j:getConnectionCountRequest" />
 			<output message="btc4j:getConnectionCountResponse" />

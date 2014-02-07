@@ -28,9 +28,10 @@
 		</license>
 	</licenses>
 	<scm>
-		<connection>scm:git:git@github.com:btc4j/btc4j-ws.git/</connection>
-		<developerConnection>scm:git:git@github.com:btc4j/btc4j-ws.git</developerConnection>
+		<connection>scm:git:ssh://git@github.com/btc4j/btc4j-ws.git/</connection>
+		<developerConnection>scm:git:ssh://git@github.com/btc4j/btc4j-ws.git</developerConnection>
 		<url>https://github.com/btc4j/btc4j-ws</url>
+		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
 		<system>GitHub</system>
@@ -49,7 +50,7 @@
 		<maven.javadoc.version>2.9.1</maven.javadoc.version>
 		<maven.source.version>2.2.1</maven.source.version>
 		<maven.gpg.version>1.4</maven.gpg.version>
-		<btc4j.daemon.version>0.0.3-SNAPSHOT</btc4j.daemon.version>
+		<btc4j.daemon.version>0.0.3</btc4j.daemon.version>
 		<spring.core.version>3.2.4.RELEASE</spring.core.version>
 		<spring.security.version>3.1.4.RELEASE</spring.security.version>
 		<junit.version>4.11</junit.version>

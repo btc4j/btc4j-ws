@@ -13,6 +13,8 @@ Using btc4j-ws
 --------------
 btc4j-ws is free software under [The MIT License (MIT)](http://opensource.org/licenses/MIT/ "The MIT License (MIT)"). It is maintained by Guillermo Gonzalez (ggonzalez@btc4j.org).
 
+Download artifacts directly from https://github.com/btc4j/btc4j-ws/releases.
+
 Issues
 ------
 Report bugs, issues, or suggestions: https://github.com/btc4j/btc4j-ws/issues.

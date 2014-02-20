@@ -13,7 +13,11 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "fault", targetNamespace = "http://www.btc4j.org/ws/")
 public class BtcWsException extends Exception {
     
-    private org.btc4j.ws.BtcFault fault;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3945324880543237247L;
+	private org.btc4j.ws.BtcFault fault;
 
     public BtcWsException() {
         super();
